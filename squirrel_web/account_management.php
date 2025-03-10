@@ -38,6 +38,11 @@ $username = $decoded->data->username;
 
     <form method="POST" action="delete_account.php">
         <h3>계정 삭제</h3>
+        <p>계정을 삭제하려면 본인의 비밀번호를 입력해 주세요.</p>
+        
+        <label for="password">비밀번호:</label>
+        <input type="password" name="password" required><br><br>
+        
         <input type="submit" value="계정 삭제">
     </form>
 

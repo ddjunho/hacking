@@ -17,14 +17,22 @@ if ($conn->connect_error) {
     die("연결 실패: " . $conn->connect_error);
 }
 
-// 검색 및 정렬 파라미터
-$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : "";
-$searchType = isset($_GET['searchType']) ? $_GET['searchType'] : "all";
+// 허용된 검색 유형 (searchType) 목록
+$allowedSearchTypes = ['all', 'title', 'author', 'content'];
+$searchType = isset($_GET['searchType']) && in_array($_GET['searchType'], $allowedSearchTypes) ? $_GET['searchType'] : 'all';
 
-// 정렬 옵션 수정
-$sortBy = isset($_GET['sortBy']) ? $_GET['sortBy'] : "created_at";
-$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : "DESC";
+// 허용된 정렬 기준 (sortBy) 목록
+$allowedSortBy = ['created_at', 'title', 'author', 'file_name'];
+$sortBy = isset($_GET['sortBy']) && in_array($_GET['sortBy'], $allowedSortBy) ? $_GET['sortBy'] : 'created_at';
 
+// 허용된 정렬 순서 (sortOrder) 목록
+$allowedSortOrder = ['ASC', 'DESC'];
+$sortOrder = isset($_GET['sortOrder']) && in_array($_GET['sortOrder'], $allowedSortOrder) ? $_GET['sortOrder'] : 'DESC';
+
+// 검색어 처리 (XSS 방지)
+$search = isset($_GET['search']) ? htmlspecialchars($_GET['search'], ENT_QUOTES, 'UTF-8') : "";
+
+// 날짜 입력 값 검증
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : "";
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : "";
 
@@ -97,8 +105,6 @@ $result = $conn->query($sql);
                 </section>
             <?php endif; ?>
 
-
-
             <section class="board-list">
                 <table>
                     <thead>
@@ -129,7 +135,6 @@ $result = $conn->query($sql);
                     </tbody>
                 </table>
             </section>
-
 
             <section class="search-section">
                 <form class="search-form" method="GET" action="board_list.php">
@@ -216,9 +221,6 @@ $result = $conn->query($sql);
                 <?php } ?>
             </div>
 
-
-
-
             <nav class="navigation">
                 <a href="index.html" class="btn">홈으로 가기</a>
                 <?php if (isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) :?>
@@ -231,4 +233,3 @@ $result = $conn->query($sql);
     </div>
 </body>
 </html>
-

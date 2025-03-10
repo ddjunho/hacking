@@ -45,11 +45,13 @@ if (isset($_GET['delete_id'])) {
     <h1>회원 목록</h1>
     <ul>
         <?php
+        // XSS 방어
         // 사용자 이름을 목록으로 출력
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<li>아이디: " . $row["id"] . " - 사용자 이름: " . $row["username"] . " - 비밀번호: " . $row["password"] . "</li>";
-                // echo "<li>아이디: " . $row["id"] . " - 사용자 이름: " . $row["username"] . " - 비밀번호: " . $row["password"] . "<a href='users.php?delete_id=" . $row["id"] . "' onclick=\"return confirm('정말로 이 사용자를 삭제하시겠습니까?');\">삭제</a>
+                
+                echo "<li>아이디: " . $row["id"] . " - 사용자 이름: " . strip_tags($row["username"]) . " - 비밀번호: " . $row["password"] . "</li>";
+                // echo "<li>아이디: " . $row["id"] . " - 사용자 이름: " . strip_tags($row["username"]) . " - 비밀번호: " . $row["password"] . "<a href='users.php?delete_id=" . $row["id"] . "' onclick=\"return confirm('정말로 이 사용자를 삭제하시겠습니까?');\">삭제</a>
                 // </li>";
             }
         } else {

